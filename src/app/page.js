@@ -1,95 +1,145 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import { useState, useEffect, useRef } from "react";
+import Editor from "@monaco-editor/react";
+import styles from "./page.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHtml5, faCss3, faJs } from "@fortawesome/free-brands-svg-icons";
+import { faPlay, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+
+const files = {
+  "index.html": {
+    name: "index.html",
+    language: "html",
+    value: "",
+  },
+  "style.css": {
+    name: "style.css",
+    language: "css",
+    value: "",
+  },
+  "script.js": {
+    name: "script.js",
+    language: "javascript",
+    value: "",
+  },
+};
 
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+  const [fileName, setFileName] = useState("index.html");
+  const [htmlCode, setHtmlCode] = useState("");
+  const [cssCode, setCssCode] = useState("");
+  const [jsCode, setJsCode] = useState("");
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+  const editorRef = useRef(null);
+  const srcDoc = `
+  <html>0
+    <body>${htmlCode}</body>
+    <style>${cssCode}</style>
+    <script>${jsCode}</script>
+  </html>
+`;
+  function handleEditorChange(value) {
+    // console.log("FFF");
+    if (file.name === "index.html") {
+      console.log(file.value)
+      setHtmlCode(file.value);
+    } else if (file.name === "style.css") {
+      setCssCode(file.value);
+    } else {
+      setJsCode(file.value);
+    }
+    file.value = value;
+  }
+
+  function handleEditorDidMount(editor, monaco) {
+    editorRef.current = editor;
+  }
+
+  const file = files[fileName];
+
+  useEffect(() => {
+    const runBtn = document.getElementById("runCode");
+    const clsBtn = document.getElementById("closeWindow");
+    runBtn?.addEventListener("click", () => {
+      document.getElementById("outputWindow").style.display = "block";
+    });
+
+    clsBtn?.addEventListener("click", () => {
+      document.getElementById("outputWindow").style.display = "none";
+    });
+  }, []);
+
+  return (
+    <>
+      <div>
+        <div className={styles.topBar}>
+          <button
+            className={styles.htmlButton}
+            disabled={fileName === "index.html"}
+            onClick={() => setFileName("index.html")}
+          >
+            <div>
+              <FontAwesomeIcon icon={faHtml5} />
+            </div>
+            index.html
+          </button>
+          <button
+            className={styles.cssButton}
+            disabled={fileName === "style.css"}
+            onClick={() => setFileName("style.css")}
+          >
+            <div>
+              <FontAwesomeIcon icon={faCss3} />
+            </div>
+            style.css
+          </button>
+          <button
+            className={styles.jsButton}
+            disabled={fileName === "script.js"}
+            onClick={() => setFileName("script.js")}
+          >
+            <div>
+              <FontAwesomeIcon icon={faJs} />
+            </div>{" "}
+            script.js
+          </button>
+          <button className={styles.playButton} id="runCode">
+            <div>
+              <FontAwesomeIcon icon={faPlay} />
+            </div>{" "}
+            Run
+          </button>
+        </div>
+        <Editor
+          height="100vh"
+          theme="vs-dark"
+          saveViewState={true}
+          path={file.name}
+          defaultLanguage={file.language}
+          defaultValue={file.value}
+          onChange={handleEditorChange}
+          value={file.value}
         />
       </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div className={styles.websiteWindow} id="outputWindow">
+        <button className={styles.closeButton} id="closeWindow">
+          <div>
+            <FontAwesomeIcon icon={faCircleXmark} />
+          </div>{" "}
+          Close
+        </button>
+        <iframe
+          title="output"
+          srcDoc={`
+  <html>
+    <body>${files["index.html"].value}</body>
+    <style>${files["style.css"].value}</style>
+    <script>${files["script.js"].value}</script>
+  </html>
+`}
+          className={styles.outputiframewindow}
+        />
       </div>
-    </main>
-  )
+    </>
+  );
 }

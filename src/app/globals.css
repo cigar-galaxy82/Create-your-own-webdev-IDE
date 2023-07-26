@@ -105,3 +105,11 @@ a {
     color-scheme: dark;
   }
 }
+
+button:disabled{
+  border: 1px solid hsla(0,0%,100%,.18);
+}
+
+#outputWindow{
+  display: none;
+}

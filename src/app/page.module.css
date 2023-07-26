@@ -227,3 +227,73 @@
     transform: rotate(0deg);
   }
 }
+
+.topBar{
+  background-color: #242424;
+  display: flex;
+
+}
+
+.jsButton,.cssButton, .htmlButton, .playButton, .closeButton {
+  padding: 10px;
+  font-size: 0.9rem;
+  background-color: #242424;
+  color: white;
+  display: flex;
+  flex-direction: row;
+}
+
+.closeButton{
+  width: 100%;
+  background-color: white;
+  color: #242424;
+  font-weight: 700;
+}
+
+.htmlButton svg{
+  color: rgb(248, 48, 48);
+}
+
+.cssButton svg{
+  color: rgb(21, 130, 255);
+}
+
+.jsButton svg{
+  color: rgb(243, 243, 16);
+}
+
+.playButton svg {
+  color: rgb(46, 192, 46);
+}
+
+.closeButton svg {
+  color: rgb(248, 48, 48);
+}
+
+.jsButton div,.htmlButton div, .cssButton div, .playButton div, .closeButton div {
+  padding-right: 2px;
+  margin: 1px;
+}
+
+.split{
+  display: flex;
+  flex-direction: row;
+}
+
+
+.editor {
+  position: absolute;
+}
+
+.outputiframewindow {
+  width: 50vw;
+  height: 45vh;
+  background-color: white;
+}
+
+.websiteWindow{
+  position: absolute;
+  z-index: 1;
+  top: 30vh;
+  left: 25vw;
+}
