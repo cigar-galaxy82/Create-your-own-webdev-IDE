@@ -244,9 +244,8 @@
 }
 
 .closeButton{
-  width: 100%;
-  background-color: white;
-  color: #242424;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 10px 0 rgba(0,0,0,.2);
   font-weight: 700;
 }
 
@@ -296,4 +295,9 @@
   z-index: 1;
   top: 30vh;
   left: 25vw;
+}
+
+.buttonBlock {
+  background-color: #F0F4F4;
+  box-shadow: 0 4px 10px 0 rgba(0,0,0,.2);
 }

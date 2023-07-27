@@ -30,29 +30,8 @@ export default function Home() {
   const [cssCode, setCssCode] = useState("");
   const [jsCode, setJsCode] = useState("");
 
-  const editorRef = useRef(null);
-  const srcDoc = `
-  <html>0
-    <body>${htmlCode}</body>
-    <style>${cssCode}</style>
-    <script>${jsCode}</script>
-  </html>
-`;
   function handleEditorChange(value) {
-    // console.log("FFF");
-    if (file.name === "index.html") {
-      console.log(file.value)
-      setHtmlCode(file.value);
-    } else if (file.name === "style.css") {
-      setCssCode(file.value);
-    } else {
-      setJsCode(file.value);
-    }
     file.value = value;
-  }
-
-  function handleEditorDidMount(editor, monaco) {
-    editorRef.current = editor;
   }
 
   const file = files[fileName];
@@ -60,7 +39,10 @@ export default function Home() {
   useEffect(() => {
     const runBtn = document.getElementById("runCode");
     const clsBtn = document.getElementById("closeWindow");
-    runBtn?.addEventListener("click", () => {
+    runBtn?.addEventListener("click", () => { 
+      setHtmlCode(files["index.html"].value);
+      setCssCode(files["style.css"].value);
+      setJsCode(files["script.js"].value);
       document.getElementById("outputWindow").style.display = "block";
     });
 
@@ -122,19 +104,20 @@ export default function Home() {
         />
       </div>
       <div className={styles.websiteWindow} id="outputWindow">
-        <button className={styles.closeButton} id="closeWindow">
-          <div>
-            <FontAwesomeIcon icon={faCircleXmark} />
-          </div>{" "}
-          Close
-        </button>
+        <div className={styles.buttonBlock}>
+          <button className={styles.closeButton} id="closeWindow">
+            <div>
+              <FontAwesomeIcon icon={faCircleXmark} />
+            </div>
+          </button>
+        </div>
         <iframe
           title="output"
           srcDoc={`
   <html>
-    <body>${files["index.html"].value}</body>
-    <style>${files["style.css"].value}</style>
-    <script>${files["script.js"].value}</script>
+    <body>${htmlCode}</body>
+    <style>${cssCode}</style>
+    <script>${jsCode}</script>
   </html>
 `}
           className={styles.outputiframewindow}
